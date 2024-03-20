@@ -1,27 +1,25 @@
-// FRONT-END (CLIENT) JAVASCRIPT HERE
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('orderForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-const submit = async function( event ) {
-  // stop form submission from trying to load
-  // a new .html page for displaying results...
-  // this was the original browser behavior and still
-  // remains to this day
-  event.preventDefault()
-  
-  const input = document.querySelector( "#yourname" ),
-        json = { yourname: input.value },
-        body = JSON.stringify( json )
+    const form = document.getElementById("orderForm");
+    const formData = new FormData(form);
+    const toppings = formData.getAll("toppings").filter(topping => topping !== "").join(", ");
+    const json = Object.fromEntries(formData.entries());
+    json.toppings = toppings;
+    json.paid = formData.get("paymentConfirmation") === 'yes' ? "Yes" : "No";
 
-  const response = await fetch( "/submit", {
-    method:"POST",
-    body 
-  })
+    const response = await fetch("/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify(json)
+    });
 
-  const text = await response.text()
+    const text = await response.text();
+    console.log("Response: ", text);
 
-  console.log( "text:", text )
-}
-
-window.onload = function() {
-   const button = document.querySelector("button");
-  button.onclick = submit;
-}
+    $('#formSubmissionModal').modal('show');
+  });
+});

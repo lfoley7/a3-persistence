@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <title>Pies Orders</title>
+    <link rel="icon" href="/resources/btp_dragon_color.png" type="image/png">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg d-flex justify-content-center">
+        <img class="beta-logo" src="/resources/btp_dragon_stamp_white.png" alt="Beta Dragon">
+        <div class="navbar-brand mx-auto">Beta Theta Pies</div>
+        <button class="mr-0" id="make-orders-button">Make an Order!</button>
+    </nav>
+    <div class="container">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Instructions</th>
+                        <th>Phone</th>
+                        <th>Toppings</th>
+                        <th>Dietary</th>
+                        <th>Delivery Date</th>
+                        <th>Delivery Time</th>
+                        <th>Order Queue</th>
+                        <th>Paid?</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer class="footer text-white mt-auto py-3">
+        <div class="text-center">
+            Property of the Eta Tau chapter of Beta Theta Pi
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('make-orders-button').onclick = function () {
+            window.location.href = 'http://localhost:3000';
+        };
+
+        // Fetch the orders data and update the table
+        function fetchOrdersAndUpdateTable() {
+            fetch('/orders')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('table tbody');
+                    tableBody.innerHTML = '';
+                    data.forEach(order => {
+                        const row = `<tr>
+                <td data-field="name" contenteditable="true">${order.name}</td>
+                <td data-field="email" contenteditable="true">${order.email}</td>
+                <td data-field="address" contenteditable="true">${order.address}</td>
+                <td data-field="deliveryInstructions" contenteditable="true">${order.deliveryInstructions}</td>
+                <td data-field="phone" contenteditable="true">${order.phone}</td>
+                <td data-field="toppings" contenteditable="true">${order.toppings}</td>
+                <td data-field="dietary" contenteditable="true">${order.dietary}</td>
+                <td data-field="deliveryDate" contenteditable="true">${order.deliveryDate}</td>
+                <td data-field="deliveryTime" contenteditable="true">${order.deliveryTime}</td>
+                <td data-field="orderRank" contenteditable="true">${order.orderRank}</td> 
+                <td data-field="paid" contenteditable="true">${order.paid}</td>
+                <td data-field="comments" contenteditable="true">${order.comments}</td>
+              </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        $('table').on('blur', '[contenteditable="true"]', function () {
+            const row = $(this).closest('tr');
+            const data = {
+                id: row.data('id'),
+                field: $(this).data('field'),
+                newValue: $(this).text()
+            };
+            console.log(data);
+        });
+
+        window.onload = fetchOrdersAndUpdateTable;
+    </script>
+</body>
+
+</html>
