@@ -130,6 +130,10 @@ button.mr-0 {
   width: 70%;
 }
 
+.asterisk {
+  color: red;
+}
+
 #orderForm {
   display: flex;
   flex-direction: column;

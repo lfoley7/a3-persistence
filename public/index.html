@@ -25,24 +25,24 @@
     <div class="order-banner">Order your Pizza Pie!</div>
     <form id="orderForm">
       <div class="form-field">
-        <label for="name">What Is Your Name:</label>
-        <input type="text" id="name" name="name" placeholder="John Do" class="form-control">
+        <label for="name">What Is Your Name<label class="asterisk">*</label>:</label>
+        <input type="text" id="name" name="name" placeholder="John Do" required class="form-control">
       </div>
       <div class="form-field">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="example@wpi.edu" required class="form-control">
+        <input type="email" id="email" name="email" placeholder="example@wpi.edu" class="form-control">
       </div>
       <div class="form-field">
-        <label for="address">Delivery Address:</label>
+        <label for="address">Delivery Address<label class="asterisk">*</label>:</label>
         <input type="text" id="address" name="address" placeholder="119 West Street" required class="form-control">
       </div>
       <div class="form-field">
-        <label for="delivery-instructions">Delivery Instructions:</label>
+        <label for="delivery-instructions">Delivery Instructions<label class="asterisk">*</label>:</label>
         <textarea id="delivery-instructions" name="deliveryInstructions" rows="3" required
           class="form-control"></textarea>
       </div>
       <div class="form-field">
-        <label for="phone">Phone Number:</label>
+        <label for="phone">Phone Number<label class="asterisk">*</label>:</label>
         <input type="tel" id="phone" name="phone" required class="form-control">
       </div>
 
@@ -121,7 +121,7 @@
         <input type="text" id="dietary" name="dietary" class="form-control">
       </div>
       <div class="form-field">
-        <label for="pizzaDaySelect">Which Day Do You Want Your Pizza:</label>
+        <label for="pizzaDaySelect">Which Day Do You Want Your Pizza<label class="asterisk">*</label>:</label>
         <select class="form-control" id="pizzaDaySelect" name="deliveryDate" required>
           <option value="">Select a Date</option>
           <option value="Wednesday, February 14th">Wednesday, February 14th</option>
@@ -130,7 +130,7 @@
         </select>
       </div>
       <div class="form-field">
-        <label for="deliveryTimeSelect">Select a Delivery Time:</label>
+        <label for="deliveryTimeSelect">Select a Delivery Time<label class="asterisk">*</label>:</label>
         <select class="form-control" id="deliveryTimeSelect" name="deliveryTime" required>
           <option value="">Select a Time</option>
           <option value="6:00 PM">6:00 PM</option>
