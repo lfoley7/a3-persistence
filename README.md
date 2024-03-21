@@ -5,8 +5,9 @@ Every year, my fraternity Beta Theta Pi runs our Beta Theta Pies event, where we
 
 ## Technical Achievements
 - **jQuery Implementation**: This webpage uses jQuery to detect when buttons are pressed and forms are submitted to create the appropriate response.
-- **Form Validation**: This website correctly uses HTML form validation to make sure that only forms with the required field inputted are submitted
-- **Node.js FS**: Uses the Node.js File System library to read and write data from the server and to the table
+- **Form Validation**: This website correctly uses HTML form validation to make sure that only forms with the required field inputted are submitted.
+- **Node.js FS**: Uses the Node.js File System library to read and write data from the server and to the table.
+- **Dynamic Order Scheduling**: Uses server-side logic to rearrange the orders in the table by earliest and latest time, and gives each order a dynamic order queue value.
 
 ### Design/Evaluation Achievements
 - **BootStrap Implementation**: This webpage uses Bootstrap for proper formatting and for element styling. Aspects of Bootstrap that are used include Bootstrap modals and buttons, as well as Bootstrap grid positioning.
