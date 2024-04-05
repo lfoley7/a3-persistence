@@ -7,8 +7,8 @@
     <title>Login Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="./public/css/login.css">
-    <link rel="icon" href="./public/resources/btp_dragon_color.png" type="image/png">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="icon" href="./resources/btp_dragon_color.png" type="image/png">
 </head>
 
 <body>
@@ -76,7 +76,7 @@
                     console.log('Login attempt with:', emailInput.value, passwordInput.value);
                     localStorage.setItem('userEmail', emailInput.value);
                     // Optionally, redirect after successful login:
-                    window.location.href = './public/order.html';
+                    window.location.href = './order.html';
                 }
             });
         });
