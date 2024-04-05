@@ -52,14 +52,14 @@
 
     <script>
         document.getElementById('make-orders-button').onclick = function () {
-            window.location.href = 'http://localhost:5500/public/order.html';
+            window.location.href = '/public/order.html';
         };
 
         // Fetch the orders data and update the table
         async function fetchOrdersAndUpdateTable() {
             const userEmail = localStorage.getItem('userEmail'); // Retrieve the logged-in user's email
             try {
-                const response = await fetch(`http://localhost:3000/orders?email=${userEmail}`);
+                const response = await fetch(`/orders?email=${userEmail}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -104,7 +104,7 @@
             updateData[field] = newValue;
 
             try {
-                const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
+                const response = await fetch(`/orders/${orderId}`, {
                     method: 'PATCH', // or 'PUT', depending on your server setup
                     headers: {
                         'Content-Type': 'application/json',
@@ -133,7 +133,7 @@
 
         async function deleteOrder(orderId) {
             try {
-                const response = await fetch(`http://localhost:3000/orders/${orderId}`, {
+                const response = await fetch(`/orders/${orderId}`, {
                     method: 'DELETE',
                 });
                 if (!response.ok) {
