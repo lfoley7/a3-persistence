@@ -130,7 +130,7 @@ app.patch('/orders/:id', async (req, res) => {
 
 // Serve HTML files
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/order.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/all_orders.html', (req, res) => {
