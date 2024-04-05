@@ -27,9 +27,9 @@ body {
   display: flexbox;
   flex-direction: column;
   flex: 1;
-  width: 100%;
-  min-width: 100%;
-  height: auto;
+  width: 120rem;
+  max-width: 100% !important;
+  height: 200rem;
   background-color: rgba(255, 255, 255, .9) !important;
   align-items: center;
 }
