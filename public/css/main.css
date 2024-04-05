@@ -359,3 +359,9 @@ textarea.form-control {
     height: 75%;
   }
 }
+
+@font-face {
+  font-family: 'Poppins';
+  font-display: swap;
+  src: url('path/to/font.woff2') format('woff2');
+}
