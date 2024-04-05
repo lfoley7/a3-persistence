@@ -1,111 +1,167 @@
-const http = require("http"),
-  fs = require("fs"),
-  mime = require("mime"),
-  dir = "public/",
-  port = 3000;
+const express = require("express");
+const app = express();
+const mongoose = require('mongoose');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+require('dotenv').config();
+const fs = require('fs');
+const mime = require('mime');
+const port = process.env.PORT || 3000;
+const dir = "public/";
+const cors = require('cors');
+app.use(cors());
 
-let appdata = []; // Store our orders
+app.use(express.static("public"))
+app.use(express.json())
 
-const server = http.createServer(function (request, response) {
-  if (request.method === "GET") {
-    handleGet(request, response);
-  } else if (request.method === "POST") {
-    handlePost(request, response);
+
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
   }
 });
 
-function sortAndRankOrders() {
-  appdata.sort((a, b) => {
-    let aColonPosition = a.deliveryTime.indexOf(":");
-    let bColonPosition = b.deliveryTime.indexOf(":");
-    const dateA = new Date((new Date().getFullYear()), 1, a.deliveryDate.slice(-4, -2), (Number(a.deliveryTime.slice(0, aColonPosition)) + 12), a.deliveryTime.slice(aColonPosition + 1, aColonPosition + 3));
-    const dateB = new Date((new Date().getFullYear()), 1, b.deliveryDate.slice(-4, -2), (Number(b.deliveryTime.slice(0, bColonPosition)) + 12), b.deliveryTime.slice(bColonPosition + 1, bColonPosition + 3));
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Successfully connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+let collection = null;
+
+const orderSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  address: String,
+  deliveryInstructions: String,
+  phone: String,
+  toppings: [String],
+  dietary: String,
+  deliveryDate: String,
+  deliveryTime: String,
+  orderRank: Number,
+  paid: String,
+  comments: String,
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+// Middleware
+app.use(express.json());
+app.use(express.static(dir));
+
+// Handle POST request
+app.post("/submit", async (req, res) => {
+  try {
+    const newOrder = new Order(req.body);
+    await newOrder.save();
+    await sortAndRankOrders();
+    res.send({ message: "Order received and ranked" });
+  } catch (err) {
+    // Log the error for server-side visibility
+    console.error(err);
+
+    // Send a more detailed error response to the client
+    res.status(400).json({
+      message: "Error processing request",
+      error: err.message // Sending back a more specific error message
+    });
+  }
+});
+
+// Function to sort and rank orders
+async function sortAndRankOrders() {
+  const orders = await Order.find({});
+  orders.sort((a, b) => {
+    const dateA = new Date(`${a.deliveryDate}T${a.deliveryTime}`);
+    const dateB = new Date(`${b.deliveryDate}T${b.deliveryTime}`);
     return dateA - dateB;
   });
 
-  appdata.forEach((order, index) => {
-    order.orderRank = index + 1;
-  });
+  for (let i = 0; i < orders.length; i++) {
+    orders[i].orderRank = i + 1;
+    await orders[i].save();
+  }
 }
 
-const handlePost = function (request, response) {
-  let dataString = "";
-
-  request.on("data", function (data) {
-    dataString += data;
-  });
-
-  request.on("end", function () {
-    const orderData = JSON.parse(dataString);
-    appdata.push(orderData);
-
-    sortAndRankOrders();
-
-    response.writeHead(200, "OK", { "Content-Type": "text/plain" });
-    response.end("Order received and ranked");
-  });
-};
-
-const handleGet = function (request, response) {
-  const filename = dir + request.url.slice(1);
-
-  if (request.url === "/") {
-    sendFile(response, "public/index.html");
-  } else if (request.url === "/all_orders.html") {
-    sendUpdatedOrdersPage(response);
-  } else if (request.url === "/orders") {
-    sortAndRankOrders();
-    response.writeHead(200, { "Content-Type": "application/json" });
-    response.end(JSON.stringify(appdata));
-  } else {
-    sendFile(response, filename);
+// Handle GET requests
+app.get("/orders", async (req, res) => {
+  const userEmail = req.query.email; // Retrieve the email from query parameters
+  try {
+    // Filter orders by the provided email
+    const orders = await Order.find({ email: userEmail }).sort('orderRank');
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("An error occurred while fetching orders.");
   }
-};
+});
 
-const sendFile = function (response, filename) {
-  const type = mime.getType(filename);
+app.delete('/orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Order.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to delete the order', error: err.message });
+  }
+});
 
-  fs.readFile(filename, function (err, content) {
-    if (err === null) {
-      response.writeHeader(200, { "Content-Type": type });
-      response.end(content);
-    } else {
-      response.writeHeader(404);
-      response.end("404 Error: File Not Found");
+app.patch('/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    // Find the order by ID and update it with the new data
+    // Assuming updateData contains the field to update and the new value
+    const updatedOrder = await Order.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedOrder) {
+      return res.status(404).send({ message: 'Order not found' });
     }
-  });
-};
 
-const sendUpdatedOrdersPage = function (response) {
-  fs.readFile("public/all_orders.html", 'utf8', function (err, content) {
-    if (err) {
-      response.writeHeader(404);
-      response.end("404 Error: File Not Found");
-      return;
-    }
+    res.status(200).json({ message: 'Order updated successfully', updatedOrder });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update the order', error: err.message });
+  }
+});
 
-    let ordersHtml = appdata.map(order => {
-      return `<tr>
-        <td data-field="name" contenteditable="true">${order.name}</td>
-        <td data-field="email" contenteditable="true">${order.email}</td>
-        <td data-field="address" contenteditable="true">${order.address}</td>
-        <td data-field="deliveryInstructions" contenteditable="true">${order.deliveryInstructions}</td>
-        <td data-field="phone" contenteditable="true">${order.phone}</td>
-        <td data-field="toppings" contenteditable="true">${order.toppings}</td>
-        <td data-field="dietary" contenteditable="true">${order.dietary}</td>
-        <td data-field="deliveryDate" contenteditable="true">${order.deliveryDate}</td>
-        <td data-field="deliveryTime" contenteditable="true">${order.deliveryTime}</td>
-        <td data-field="orderRank" contenteditable="true">${order.orderRank}</td>
-        <td data-field="paid" contenteditable="true">${order.paid}</td>
-        <td data-field="comments" contenteditable="true">${order.comments}</td>
-      </tr>`;
-    }).join('');
+// Serve HTML files
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/order.html');
+});
 
-    content = content.replace('<tbody></tbody>', `<tbody>${ordersHtml}</tbody>`);
+app.get('/all_orders.html', (req, res) => {
+  Order.find({}).sort('orderRank').then(orders => {
+    fs.readFile("public/all_orders.html", 'utf8', (err, content) => {
+      if (err) return res.status(404).send("404 Error: File Not Found");
+      console.log(localStorage.getItem('userEmail'));
+      let ordersHtml = orders.map(order => {
+        return `<tr>
+          <td>${order.name}</td>
+          <td>${localStorage.getItem('userEmail')}</td>
+          <td>${order.address}</td>
+          <td>${order.deliveryInstructions}</td>
+          <td>${order.phone}</td>
+          <td>${order.toppings.join(", ")}</td>
+          <td>${order.dietary}</td>
+          <td>${order.deliveryDate}</td>
+          <td>${order.deliveryTime}</td>
+          <td>${order.orderRank}</td>
+          <td>${order.paid}</td>
+          <td>${order.comments}</td>
+        </tr>`;
+      }).join('');
 
-    response.writeHeader(200, { "Content-Type": "text/html" });
-    response.end(content);
-  });
-};
+      content = content.replace('<tbody></tbody>', `<tbody>${ordersHtml}</tbody>`);
+      res.send(content);
+    });
+  }).catch(err => res.status(500).send(err));
+});
 
-server.listen(process.env.PORT || port);
+// Start server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

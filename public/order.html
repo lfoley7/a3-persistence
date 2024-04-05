@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+  <title>Beta Theta Pies</title>
+  <link rel="icon" href="./resources/btp_dragon_color.png" type="image/png">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg d-flex justify-content-center">
+    <img class="beta-logo" src="./resources/btp_dragon_stamp_white.png" alt="Beta Dragon">
+    <div class="navbar-brand mx-auto">Beta Theta Pies</div>
+    <button class="mr-0" id="all-orders-button">See all the Orders!</button>
+  </nav>
+  <div class="container">
+    <div class="order-banner">Order your Pizza Pie!</div>
+    <form id="orderForm">
+      <div class="form-field">
+        <label for="name">What Is Your Name<label class="asterisk">*</label>:</label>
+        <input type="text" id="name" name="name" placeholder="John Do" required class="form-control">
+      </div>
+      <div class="form-field">
+        <label for="address">Delivery Address<label class="asterisk">*</label>:</label>
+        <input type="text" id="address" name="address" placeholder="119 West Street" required class="form-control">
+      </div>
+      <div class="form-field">
+        <label for="delivery-instructions">Delivery Instructions<label class="asterisk">*</label>:</label>
+        <textarea id="delivery-instructions" name="deliveryInstructions" rows="3" required
+          class="form-control"></textarea>
+      </div>
+      <div class="form-field">
+        <label for="phone">Phone Number<label class="asterisk">*</label>:</label>
+        <input type="tel" id="phone" name="phone" required class="form-control">
+      </div>
+
+      <!-- Pizza Maker -->
+      <div class="form-group">
+        <input type="hidden" id="sauce_input" name="toppings" value="sauce">
+        <input type="hidden" id="cheese_input" name="toppings" value="cheese">
+        <input type="hidden" id="pepperoni_input" name="toppings" value="pepperoni">
+        <input type="hidden" id="bacon_input" name="toppings" value="bacon">
+        <input type="hidden" id="onion_input" name="toppings" value="onion">
+        <input type="hidden" id="greenpepper_input" name="toppings" value="green pepper">
+        <input type="hidden" id="sausage_input" name="toppings" value="sausage">
+        <input type="hidden" id="mushroom_input" name="toppings" value="mushroom">
+        <div class="row" id="pizzamaker">
+          <div class="col-md-6 col-12" id="pizza">
+            <div id="crust">
+              <div id="sauce"></div>
+              <div id="cheese">
+                <img alt="cheese" src="./resources/cheese.svg">
+              </div>
+              <div id="pepperoni" style="display: none">
+                <img alt="pepperoni" src="./resources/pepperoni.svg">
+              </div>
+              <div id="bacon" style="display: none">
+                <img alt="bacon" src="./resources/bacon.svg">
+              </div>
+              <div id="sausage" style="display: none">
+                <img alt="sausage" src="./resources/sausage.svg">
+              </div>
+              <div id="greenpepper" style="display: none">
+                <img alt="greenpepper" src="./resources/green-peppers.svg">
+              </div>
+              <div id="mushroom" style="display: none">
+                <img alt="mushroom" src="./resources/mushroom.svg">
+              </div>
+              <div id="onion" style="display: none">
+                <img alt="onion" src="./resources/onion.svg">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-12" id="toppings">
+            <div class="row justify-content-center icons">
+              <div class="col-3 toppingsIcon" id="sauce-icon">
+                <img alt="sauce-icon" src="./resources/sauce-icon.svg">
+              </div>
+              <div class="col-3 toppingsIcon" id="cheese-icon">
+                <img alt="cheese-icon" src="./resources/cheese-icon.svg">
+              </div>
+              <div class="col-3 toppingsIcon" id="pepperoni-icon">
+                <img alt="pepperoni-icon" src="./resources/pepperoni-icon.svg" class="deselected">
+              </div>
+              <div class="col-3 toppingsIcon" id="bacon-icon">
+                <img alt="bacon-icon" src="./resources/bacon-icon.svg" class="deselected">
+              </div>
+              <div class="col-3 toppingsIcon" id="onion-icon">
+                <img alt="onion-icon" src="./resources/onion-icon.svg" class="deselected">
+              </div>
+              <div class="col-3 toppingsIcon" id="greenpepper-icon">
+                <img alt="green-pepper-icon" src="./resources/green-pepper-icon.svg" class="deselected">
+              </div>
+              <div class="col-3 toppingsIcon" id="sausage-icon">
+                <img alt="sausage-icon" src="./resources/sausage-icon.svg" class="deselected">
+              </div>
+              <div class="col-3 toppingsIcon" id="mushroom-icon">
+                <img alt="mushroom-icon" src="./resources/mushroom-icon.svg" class="deselected">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="dietary">Any Dietary Concerns:</label>
+        <input type="text" id="dietary" name="dietary" class="form-control">
+      </div>
+      <div class="form-field">
+        <label for="pizzaDaySelect">Which Day Do You Want Your Pizza<label class="asterisk">*</label>:</label>
+        <select class="form-control" id="pizzaDaySelect" name="deliveryDate" required>
+          <option value="">Select a Date</option>
+          <option value="Wednesday, February 14th">Wednesday, February 14th</option>
+          <option value="Thursday, February 15th">Thursday, February 15th</option>
+          <option value="Friday, February 16th">Friday, February 16th</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="deliveryTimeSelect">Select a Delivery Time<label class="asterisk">*</label>:</label>
+        <select class="form-control" id="deliveryTimeSelect" name="deliveryTime" required>
+          <option value="">Select a Time</option>
+          <option value="6:00 PM">6:00 PM</option>
+          <option value="6:15 PM">6:15 PM</option>
+          <option value="6:30 PM">6:30 PM</option>
+          <option value="6:45 PM">6:45 PM</option>
+          <option value="7:00 PM">7:00 PM</option>
+          <option value="7:15 PM">7:15 PM</option>
+          <option value="7:30 PM">7:30 PM</option>
+          <option value="7:45 PM">7:45 PM</option>
+          <option value="8:00 PM">8:00 PM</option>
+          <option value="8:15 PM">8:15 PM</option>
+          <option value="8:30 PM">8:30 PM</option>
+          <option value="8:45 PM">8:45 PM</option>
+          <option value="9:00 PM">9:00 PM</option>
+          <option value="9:15 PM">9:15 PM</option>
+          <option value="9:30 PM">9:30 PM</option>
+          <option value="9:45 PM">9:45 PM</option>
+          <option value="10:00 PM">10:00 PM</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Have You Sent @lfoley7 $12 on Venmo for Your Pizza?</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="paymentConfirmation" id="paymentYes" value="yes">
+          <label class="form-check-label" for="paymentYes">Yes</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="paymentConfirmation" id="paymentNo" value="no">
+          <label class="form-check-label" for="paymentNo">No</label>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="additionalComments">Any Additional Comments?</label>
+        <textarea class="form-control" id="additionalComments" name="comments" rows="3"></textarea>
+      </div>
+
+      <button class="btn btn-light" id="form-button">Submit Your Order</button>
+    </form>
+  </div>
+  <footer class="footer text-white mt-auto py-3">
+    <div class="text-center">
+      Property of the Eta Tau chapter of Beta Theta Pi
+    </div>
+  </footer>
+
+  <div class="modal fade" id="formSubmissionModal" tabindex="-1" aria-labelledby="formSubmissionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formSubmissionModalLabel">Thank you for your Order!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Your order has been sent, and you can expect a text when your pizza is ready! Press the "Make a new Order"
+          button to create a new order, or click on the "View All Orders" button to view all the orders in the queue!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn order-btn" data-dismiss="modal">Make a new Order</button>
+          <a href="all_orders.html" class="btn view-orders-btn">View All Orders</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $('.toppingsIcon').click(function () {
+      $('img', this).toggleClass('deselected');
+      $('#' + (this.id.split('-')[0])).fadeToggle(1000);
+      const toppingHiddenInput = $('#' + (this.id.split('-')[0] + '_input'));
+      if (toppingHiddenInput.val() === "")
+        toppingHiddenInput.val(this.id.split('-')[0]);
+      else {
+        toppingHiddenInput.val("")
+      }
+    });
+
+    document.getElementById('all-orders-button').onclick = function () {
+      window.location.href = 'all_orders.html';
+    };
+
+    $('#formSubmissionuModal').modal({
+      show: false
+    });
+
+    $(document).ready(function () {
+      function checkRequiredFields() {
+        let allFilled = true;
+        $("#orderForm :input[required]").each(function () {
+          if ($(this).val() === '') {
+            allFilled = false;
+            return false;
+          }
+        });
+
+        if (allFilled) {
+          $('#form-button').removeClass('btn-light').addClass('btn-success');
+        } else {
+          $('#form-button').removeClass('btn-success').addClass('btn-light');
+        }
+      }
+
+      $("#orderForm :input[required]").on('keyup change', function () {
+        checkRequiredFields();
+      });
+
+      checkRequiredFields();
+
+      document.getElementById('all-orders-button').onclick = function () {
+        window.location.href = 'all_orders.html';
+      };
+
+      $('#formSubmissionuModal').modal({
+        show: false
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>

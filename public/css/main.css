@@ -11,7 +11,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-image: url("/resources/waves.png") !important;
+  background-image: url("../resources/waves.png") !important;
 }
 
 .row {
@@ -118,6 +118,15 @@ button.mr-0 {
   color: black !important;
 }
 
+.btn-success {
+  color: white !important;
+  background-color: #003da5 !important;
+}
+
+.btn-success:hover {
+  background-color: #2152a6 !important;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -166,24 +175,26 @@ button {
   cursor: pointer;
 }
 
-.view-orders-btn:hover {
-  background-color: #f77f98;
-}
-
-.order-btn:hover {
-  background-color: rgb(171, 202, 233);
-}
-
 .order-btn {
   background-color: rgb(171, 202, 233);
   color: white;
   font-weight: bold;
 }
 
+.order-btn:hover {
+  color: white;
+  background-color: rgb(145, 190, 235);
+}
+
 .view-orders-btn {
   background-color: #f77f98;
   color: white;
   font-weight: bold;
+}
+
+.view-orders-btn:hover {
+  color: white;
+  background-color: #ff6987;
 }
 
 #crust {
