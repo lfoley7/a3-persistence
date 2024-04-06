@@ -18,6 +18,7 @@ Include a very brief summary of your project here. Images are encouraged, along 
 
 ## Technical Achievements
 - **Hosting on Render**: I decided to host my website on Render since everyone in the Slack gave it a high review. It was very easy to deploy on this website, however the deployment process took much longer than on Glitch.
+- **Google Lighthouse Score**: (View my score)[public/resources/Google_Lighthouse_Score.png]
 
 ### Design/Evaluation Achievements
 - **Accessibility from W3C**: I followed the following tips from the W3C Web Accessibility Initiative...
